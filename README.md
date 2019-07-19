@@ -13,7 +13,7 @@ Supporting
 ### Install
 
 ```
-composer require lsv/darksky
+composer require lsv/darksky-php-wrapper
 ```
 
 ### Usage
