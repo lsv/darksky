@@ -1,6 +1,8 @@
 Darksky.net API wrapper
 -----------------------
 
+[![Build Status](https://travis-ci.org/lsv/darksky.svg?branch=master)](https://travis-ci.org/lsv/darksky) [![codecov](https://codecov.io/gh/lsv/darksky/branch/master/graph/badge.svg)](https://codecov.io/gh/lsv/darksky)
+
 PHP Wrapper for [darksky.net](https://darksky.net) weather api.
 
 Supporting

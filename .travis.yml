@@ -3,7 +3,6 @@ language: php
 php:
     - "7.2"
     - "7.3"
-    - "7.4snapshot"
 
 before_script:
     - echo 'date.timezone = "Europe/Copenhagen"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
