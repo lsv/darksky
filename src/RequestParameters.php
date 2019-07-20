@@ -13,13 +13,6 @@ trait RequestParameters
         return $this;
     }
 
-    public function extendHourly(): self
-    {
-        $this->queryParameters['extend'] = 'hourly';
-
-        return $this;
-    }
-
     public function language(string $language): self
     {
         $this->queryParameters['lang'] = $language;

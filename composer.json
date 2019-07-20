@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "ext-json": "*",
         "symfony/http-client": "^4.3",
         "symfony/options-resolver": "^4.3",
         "symfony/serializer": "^4.3",

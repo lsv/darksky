@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Lsv\Darksky;
 
-use Lsv\Darksky\Response\ForecastResponse;
+use DateTime;
+use Lsv\Darksky\Response\TimemachineResponse;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class Forecast extends Request
+class Timemachine extends Request
 {
     use RequestParameters;
 
@@ -22,29 +23,31 @@ final class Forecast extends Request
      */
     private $longitude;
 
-    public function call(float $latitude, float $longitude): ForecastResponse
-    {
+    /**
+     * @var DateTime
+     */
+    private $time;
+
+    public function call(
+        float $latitude,
+        float $longitude,
+        DateTime $time
+    ): TimemachineResponse {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+        $this->time = $time;
 
         return $this->makeRequest();
     }
 
-    public function extendHourly(): self
-    {
-        $this->queryParameters['extend'] = 'hourly';
-
-        return $this;
-    }
-
-    protected function parseResponse(ResponseInterface $response): ForecastResponse
+    protected function parseResponse(ResponseInterface $response): TimemachineResponse
     {
         $data = $response->toArray();
 
-        /** @var ForecastResponse $object */
+        /** @var TimemachineResponse $object */
         $object = $this->getSerializer($data['timezone'] ?? null)->deserialize(
             json_encode($data),
-            ForecastResponse::class,
+            TimemachineResponse::class,
             'json'
         );
 
@@ -53,9 +56,8 @@ final class Forecast extends Request
 
     protected function resolve(OptionsResolver $resolver): void
     {
-        $resolver->setDefined(['exclude', 'extend', 'lang', 'units']);
+        $resolver->setDefined(['exclude', 'lang', 'units']);
         $resolver->addAllowedValues('exclude', $this->excludeAllowedBlocks());
-        $resolver->addAllowedValues('extend', 'hourly');
         $resolver->addAllowedValues('lang', $this->languageAllowed());
         $resolver->addAllowedValues('units', $this->unitsAllowed());
     }
@@ -63,11 +65,12 @@ final class Forecast extends Request
     protected function getUrl(): string
     {
         return sprintf(
-            '%s/forecast/%s/%s,%s',
+            '%s/forecast/%s/%s,%s,%s',
             self::BASE_URL,
             $this->getApiKey(),
             $this->latitude,
-            $this->longitude
+            $this->longitude,
+            $this->time->format('c')
         );
     }
 }
